@@ -1,76 +1,82 @@
-import React, { useState } from 'react'
-import { generateRandomNumber } from '../helpers/GenerateRandomNumber';
-import { getLowercaseLetter, getNumber, getSymbol, getUppercaseLetter } from '../helpers/charactersForPassword';
+import { Button, Checkbox, FormLabel, Grid, TextField } from '@mui/material';
+import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
+import { PasswordLayout } from './PasswordLayout';
 
 export const PasswordGeneratorApp = () => {
-    const [passwordSettings, setPasswordSettings] = useState({
-        lengthPassword: 3,
-        uppercaseLetters: true,
-        lowercaseLetters: true,
-        numbers: false,
-        symbols: true
-    });
+    const { lengthPassword, optionsForGenerate, generatePasswords, setLengthPassword } = usePasswordGenerator();
+    
+    const onSubmit = (event) => {
+        event.preventDefault();
+        generatePasswords();
+    }
 
-    const [numberOptionsChoosed, setNumberOptionsChoosed] = useState(3);
-
-    const onGeneratePassword = () => {
-        let newPassword = "";
-        let countOptionsCompleted = 0;
-
-        let countUppercaseLetter = 0;
-        let countLowercaseLetter = 0;
-        let countNumber = 0;
-        let countSymbol = 0;
-
-        let selectedForGenerate;
-
-        while(newPassword.length < passwordSettings.lengthPassword){
-            if (countOptionsCompleted === numberOptionsChoosed) {
-                countUppercaseLetter = 0;
-                countLowercaseLetter = 0;
-                countNumber = 0;
-                countSymbol = 0;
-                countOptionsCompleted = 0;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (passwordSettings.uppercaseLetters && countUppercaseLetter === 0 && selectedForGenerate) {
-                countUppercaseLetter = 1;
-                countOptionsCompleted += 1;
-                newPassword += getUppercaseLetter();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (passwordSettings.lowercaseLetters && countLowercaseLetter === 0 && selectedForGenerate) {
-                countLowercaseLetter = 1;
-                countOptionsCompleted += 1;
-                newPassword += getLowercaseLetter();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (passwordSettings.numbers && countNumber === 0 && selectedForGenerate) {
-                countNumber = 1;
-                countOptionsCompleted += 1;
-                newPassword += getNumber();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (passwordSettings.symbols && countSymbol === 0 && selectedForGenerate) {
-                countSymbol = 1;
-                countOptionsCompleted += 1;
-                newPassword += getSymbol();
-                continue;
-            }
-        }
-        console.log(newPassword);
+    const handleSetLengthPassword = ({ target }) => {
+        setLengthPassword({ lengthPassword: target.value });
     }
 
     return (
-        <>
-            <button onClick={onGeneratePassword}>Generate password</button>
-        </>
+        <PasswordLayout title="Generador de contrase&ntilde;as">
+            <form onSubmit={onSubmit}>
+                <Grid container>
+
+                    <Grid item xs={10} sm={9} alignContent={"center"}>
+                        <FormLabel sx={{ color: "white" }}>Longitud de la contrase&ntilde;a</FormLabel>
+                    </Grid>
+
+                    <Grid item xs={2} sm={3}>
+                        <TextField
+                            type='text'
+                            placeholder='0'
+                            fullWidth
+                            name='txtLengthPassword'
+                            onChange={ handleSetLengthPassword }
+                            sx={{
+                                backgroundColor: "white",
+                                color: "white"
+                            }}
+                            size='small'
+                            value={lengthPassword}
+                        />
+                    </Grid>
+
+                    <Grid item xs={10} sm={9} alignContent={"center"}>
+                        <FormLabel sx={{ color: "white" }}>Incluir palabras may&uacute;sculas</FormLabel>
+                    </Grid>
+
+                    <Grid item xs={2} sm={3}>
+                        <Checkbox checked={ optionsForGenerate.uppercaseLetters } />
+                    </Grid>
+
+                    <Grid item xs={10} sm={9} alignContent={"center"}>
+                        <FormLabel sx={{ color: "white" }}>Incluir palabras min&uacute;sculas</FormLabel>
+                    </Grid>
+
+                    <Grid item xs={2} sm={3}>
+                        <Checkbox checked={optionsForGenerate.lowercaseLetters} />
+                    </Grid>
+
+                    <Grid item xs={10} sm={9} alignContent={"center"}>
+                        <FormLabel sx={{ color: "white" }}>Incluir n&uacute;meros</FormLabel>
+                    </Grid>
+
+                    <Grid item xs={2} sm={3}>
+                        <Checkbox checked={ optionsForGenerate.numbers }/>
+                    </Grid>
+
+                    <Grid item xs={10} sm={9} alignContent={"center"}>
+                        <FormLabel sx={{ color: "white" }}>Incluir s&iacute;mbolos</FormLabel>
+                    </Grid>
+
+                    <Grid item xs={2} sm={3}>
+                        <Checkbox checked={optionsForGenerate.symbols} />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button type='submit' variant="contained" fullWidth sx={{ mt: 2 }}>Generar contrase&ntilde;as</Button>
+                    </Grid>
+
+                </Grid>
+            </form>
+        </PasswordLayout>
     )
 }

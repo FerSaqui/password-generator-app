@@ -19,7 +19,7 @@ export const passwordSlice = createSlice({
     onSetLengthPassword: (state, { payload }) => {
         state.lengthPassword = payload;
     },
-    onSetOptionSelected: (state, { payload }) => {
+    onSetSelectedOption: (state, { payload }) => {
         state.optionsForGenerate[payload.option] = payload.value;
     },
     onCalculateNumberSelectedOptions: (state) => {
@@ -31,10 +31,19 @@ export const passwordSlice = createSlice({
         }
         state.numberSelectedOptions = counter;
     },
-    onSetPasswords: (state, { payload }) => {
-        state.newPasswords = payload;
+    onAddPassword: (state, { payload }) => {
+        state.newPasswords.push(payload);
+    },
+    onClearPasswords: (state) => {
+        state.newPasswords = [];
     }
   }
 });
 
-export const {onSetLengthPassword, onSetOptionSelected, onCalculateNumberSelectedOptions, onSetPasswords} = passwordSlice.actions;
+export const {
+    onSetLengthPassword,
+    onSetSelectedOption,
+    onCalculateNumberSelectedOptions,
+    onAddPassword,
+    onClearPasswords
+} = passwordSlice.actions;

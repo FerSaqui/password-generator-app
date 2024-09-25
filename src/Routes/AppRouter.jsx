@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { PasswordGeneratorApp } from "../components/PasswordGeneratorApp";
 import { ValidatePasswordSecurity } from "../components/ValidatePasswordSecurity";
+import { AppTheme } from "../themes/AppTheme";
 
 const routes = [
     {
@@ -20,5 +21,11 @@ const routes = [
 const browserRouter = createBrowserRouter(routes);
 
 export const AppRouter = () => {
-    return <RouterProvider router={browserRouter}/>
+    return (
+        <>
+            <AppTheme>
+                <RouterProvider router={browserRouter}/>
+            </AppTheme>
+        </>
+    );
 }
