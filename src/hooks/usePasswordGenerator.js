@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { onAddPassword, onCalculateNumberSelectedOptions, onSetLengthPassword, onSetSelectedOption } from "../store/password/passwordSlice";
-import { getLowercaseLetter, getNumber, getSymbol, getUppercaseLetter } from "../helpers/charactersForPassword";
+import { onAddPassword, onCalculateNumberSelectedOptions, onClearPasswords, onSetLengthPassword, onSetSelectedOption } from "../store/password/passwordSlice";
+import { setConfigToast } from "../helpers/setConfigToast";
+import { generatePassword } from "../helpers/generatePassword";
+import { validatePasswordStrength } from "../helpers/validatePasswordStrength";
 
 export const usePasswordGenerator = () => {
     const {
@@ -24,59 +26,34 @@ export const usePasswordGenerator = () => {
         dispatch(onCalculateNumberSelectedOptions());
     }
 
-    const generatePasswords = () => {
-        let generatedPassword = "";
-        let countOptionsCompleted = 0;
-
-        let countUppercaseLetter = 0;
-        let countLowercaseLetter = 0;
-        let countNumber = 0;
-        let countSymbol = 0;
-
-        let selectedForGenerate;
-
-        while(generatedPassword.length < lengthPassword){
-            if (countOptionsCompleted === numberSelectedOptions) {
-                countUppercaseLetter = 0;
-                countLowercaseLetter = 0;
-                countNumber = 0;
-                countSymbol = 0;
-                countOptionsCompleted = 0;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (optionsForGenerate.uppercaseLetters && countUppercaseLetter === 0 && selectedForGenerate) {
-                countUppercaseLetter = 1;
-                countOptionsCompleted += 1;
-                generatedPassword += getUppercaseLetter();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (optionsForGenerate.lowercaseLetters && countLowercaseLetter === 0 && selectedForGenerate) {
-                countLowercaseLetter = 1;
-                countOptionsCompleted += 1;
-                generatedPassword += getLowercaseLetter();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (optionsForGenerate.numbers && countNumber === 0 && selectedForGenerate) {
-                countNumber = 1;
-                countOptionsCompleted += 1;
-                generatedPassword += getNumber();
-                continue;
-            }
-
-            selectedForGenerate = Boolean(Math.round(Math.random()));
-            if (optionsForGenerate.symbols && countSymbol === 0 && selectedForGenerate) {
-                countSymbol = 1;
-                countOptionsCompleted += 1;
-                generatedPassword += getSymbol();
-                continue;
-            }
+    const startGeneratePasswords = () => {
+        const bodyToast = {};
+        let arrayNewPasswords = [];
+        
+        if(lengthPassword < 1){
+            bodyToast.icon = "error";
+            bodyToast.title = "Longitud de contraseña debe ser mayor a 0";
         }
-        dispatch(onAddPassword(generatedPassword));
+
+        if(numberSelectedOptions < 1){
+            bodyToast.icon = "error";
+            bodyToast.title = "Seleccionar al menos una opción";
+        }
+
+        if(Object.keys(bodyToast).length > 0){
+            const toast = setConfigToast({ showConfirmButton: false, timer: 3000, timerProgressBar: false });
+            toast.fire(bodyToast);
+            return;
+        }
+
+        dispatch(onClearPasswords());
+        for (let index = 0; index < 5; index++) {
+            const password = generatePassword({ lengthPassword, numberSelectedOptions, ...optionsForGenerate });
+            const passwordAndInfo = validatePasswordStrength({ password });
+            arrayNewPasswords.push(passwordAndInfo);
+        }
+
+        dispatch(onAddPassword(arrayNewPasswords));
     }
 
     return {
@@ -88,7 +65,7 @@ export const usePasswordGenerator = () => {
 
         //Methods
         calculateNumberSelectedOptions,
-        generatePasswords,
+        startGeneratePasswords,
         setLengthPassword,
         setSelectedOptions,
     }

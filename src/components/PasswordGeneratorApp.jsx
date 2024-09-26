@@ -1,17 +1,30 @@
 import { Button, Checkbox, FormLabel, Grid, TextField } from '@mui/material';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import { PasswordLayout } from './PasswordLayout';
+import { Passwords } from './Passwords';
 
 export const PasswordGeneratorApp = () => {
-    const { lengthPassword, optionsForGenerate, generatePasswords, setLengthPassword } = usePasswordGenerator();
+    const {
+        lengthPassword, 
+        optionsForGenerate, 
+        startGeneratePasswords, 
+        setLengthPassword, 
+        setSelectedOptions,
+        calculateNumberSelectedOptions
+    } = usePasswordGenerator();
     
     const onSubmit = (event) => {
         event.preventDefault();
-        generatePasswords();
+        startGeneratePasswords();
     }
 
     const handleSetLengthPassword = ({ target }) => {
         setLengthPassword({ lengthPassword: target.value });
+    }
+
+    const handleChangeOptions = ({ target }) => {
+        setSelectedOptions({ option: target.name, value: target.checked });
+        calculateNumberSelectedOptions();
     }
 
     return (
@@ -43,32 +56,32 @@ export const PasswordGeneratorApp = () => {
                         <FormLabel sx={{ color: "white" }}>Incluir palabras may&uacute;sculas</FormLabel>
                     </Grid>
 
-                    <Grid item xs={2} sm={3}>
-                        <Checkbox checked={ optionsForGenerate.uppercaseLetters } />
+                    <Grid item xs={2} sm={3} textAlign={"center"}>
+                        <Checkbox onChange={handleChangeOptions} name="uppercaseLetters" checked={ optionsForGenerate.uppercaseLetters } />
                     </Grid>
 
                     <Grid item xs={10} sm={9} alignContent={"center"}>
                         <FormLabel sx={{ color: "white" }}>Incluir palabras min&uacute;sculas</FormLabel>
                     </Grid>
 
-                    <Grid item xs={2} sm={3}>
-                        <Checkbox checked={optionsForGenerate.lowercaseLetters} />
+                    <Grid item xs={2} sm={3} textAlign={"center"}>
+                        <Checkbox onChange={handleChangeOptions} name="lowercaseLetters" checked={optionsForGenerate.lowercaseLetters} />
                     </Grid>
 
                     <Grid item xs={10} sm={9} alignContent={"center"}>
                         <FormLabel sx={{ color: "white" }}>Incluir n&uacute;meros</FormLabel>
                     </Grid>
 
-                    <Grid item xs={2} sm={3}>
-                        <Checkbox checked={ optionsForGenerate.numbers }/>
+                    <Grid item xs={2} sm={3} textAlign={"center"}>
+                        <Checkbox onChange={handleChangeOptions} name="numbers" checked={ optionsForGenerate.numbers }/>
                     </Grid>
 
                     <Grid item xs={10} sm={9} alignContent={"center"}>
                         <FormLabel sx={{ color: "white" }}>Incluir s&iacute;mbolos</FormLabel>
                     </Grid>
 
-                    <Grid item xs={2} sm={3}>
-                        <Checkbox checked={optionsForGenerate.symbols} />
+                    <Grid item xs={2} sm={3} textAlign={"center"}>
+                        <Checkbox onChange={handleChangeOptions} name="symbols" checked={optionsForGenerate.symbols} />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -76,6 +89,8 @@ export const PasswordGeneratorApp = () => {
                     </Grid>
 
                 </Grid>
+
+                <Passwords />
             </form>
         </PasswordLayout>
     )

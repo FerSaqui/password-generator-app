@@ -24,15 +24,16 @@ export const passwordSlice = createSlice({
     },
     onCalculateNumberSelectedOptions: (state) => {
         let counter = 0;
-        for (const element of object) {
-            if(element === true){
+        const keys = Object.keys(state.optionsForGenerate);
+        for (const key of keys) {
+            if(state.optionsForGenerate[key] === true){
                 counter++;
             }
         }
         state.numberSelectedOptions = counter;
     },
     onAddPassword: (state, { payload }) => {
-        state.newPasswords.push(payload);
+        state.newPasswords = payload;
     },
     onClearPasswords: (state) => {
         state.newPasswords = [];
