@@ -8,6 +8,7 @@ import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { Grid, Tooltip } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const tooltipScore = `0 # Demasiado fácil de adivinar
 1 # Muy fácil de adivinar
@@ -17,11 +18,19 @@ const tooltipScore = `0 # Demasiado fácil de adivinar
 
 export const Passwords = () => {
     const [expanded, setExpanded] = useState(false);
+    const [copied, setCopied] = useState(false);
     const { newPasswords = [] } = usePasswordGenerator();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
+    const handleCopyPasswordToClipboard = () => {
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+        }, 500);
+    }
 
     return (
         <Grid marginTop={2}>
@@ -38,9 +47,11 @@ export const Passwords = () => {
                         
                         <AccordionDetails>
                             <Typography textAlign={"end"} >
-                                <Tooltip title="Copiar al portapapeles" followCursor>
-                                    <ContentPasteIcon sx={{ cursor: "pointer" }}/>
-                                </Tooltip>
+                                <CopyToClipboard text={password} onCopy={() => handleCopyPasswordToClipboard()}>
+                                    <Tooltip title={ copied ? "Copiado" : `Copiar al portapapeles`} followCursor>
+                                        <ContentPasteIcon sx={{ cursor: "pointer" }}/>
+                                    </Tooltip>
+                                </CopyToClipboard>
                             </Typography>
 
                             <Typography sx={{ fontWeight: "bold" }}>Tiempo de descifrado: </Typography>

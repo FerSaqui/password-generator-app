@@ -30,9 +30,9 @@ export const usePasswordGenerator = () => {
         const bodyToast = {};
         let arrayNewPasswords = [];
         
-        if(lengthPassword < 1){
+        if(lengthPassword < 1 || isNaN(lengthPassword)){
             bodyToast.icon = "error";
-            bodyToast.title = "Longitud de contraseña debe ser mayor a 0";
+            bodyToast.title = "Ingresar longitud de contraseña válida";
         }
 
         if(numberSelectedOptions < 1){
