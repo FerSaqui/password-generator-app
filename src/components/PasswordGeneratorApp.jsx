@@ -2,6 +2,8 @@ import { Button, Checkbox, FormLabel, Grid, TextField } from '@mui/material';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import { PasswordLayout } from './PasswordLayout';
 import { Passwords } from './Passwords';
+import { useUiStore } from '../hooks/useUiStore';
+import { LoadingScreen } from './LoadingScreen';
 
 export const PasswordGeneratorApp = () => {
     const {
@@ -12,10 +14,15 @@ export const PasswordGeneratorApp = () => {
         setSelectedOptions,
         calculateNumberSelectedOptions
     } = usePasswordGenerator();
+
+    const { finishLoadingPasswords, initLoadingPasswords, isLoadingPasswords } = useUiStore();
     
     const onSubmit = (event) => {
         event.preventDefault();
+
+        initLoadingPasswords();
         startGeneratePasswords();
+        finishLoadingPasswords();
     }
 
     const handleSetLengthPassword = ({ target }) => {
@@ -90,7 +97,11 @@ export const PasswordGeneratorApp = () => {
 
                 </Grid>
 
-                <Passwords />
+                {
+                    isLoadingPasswords
+                    ? <LoadingScreen />
+                    : <Passwords />
+                }
             </form>
         </PasswordLayout>
     )

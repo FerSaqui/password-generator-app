@@ -1,11 +1,11 @@
-import ReactLoading from 'react-loading';
+import { Rings } from 'react-loader-spinner';
 import { Grid } from '@mui/material';
 
 export const LoadingScreen = ({ type, color }) => {
     return (
         <Grid container mt={2}>
             <Grid item xs={12}>
-                <ReactLoading type={type} color={color} height={'20%'} width={'20%'} />
+                <Rings color="#00BFFF" height={80} width={80} />
             </Grid>
         </Grid>
     )
