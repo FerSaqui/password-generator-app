@@ -1,5 +1,5 @@
 import { lowercaseLetters, numbers, symbols, uppercaseLetters } from "../fixtures/ElementsPassword";
-import { generateRandomNumber } from "./GenerateRandomNumber"
+import { generateRandomNumber } from "./generateRandomNumber"
 
 export const getUppercaseLetter = () => {
     const position = generateRandomNumber({ min: 0, max: 25 });
