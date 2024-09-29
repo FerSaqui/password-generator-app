@@ -9,7 +9,8 @@ const initialState = {
         symbols: true
     },
     numberSelectedOptions: 4,
-    newPasswords: []
+    newPasswords: [],
+    passwordForValidate: ""
 }
 
 export const passwordSlice = createSlice({
@@ -37,14 +38,18 @@ export const passwordSlice = createSlice({
     },
     onClearPasswords: (state) => {
         state.newPasswords = [];
+    },
+    onSetPasswordForValidate: (state, { payload }) => {
+        state.passwordForValidate = payload;
     }
   }
 });
 
 export const {
-    onSetLengthPassword,
-    onSetSelectedOption,
-    onCalculateNumberSelectedOptions,
     onAddPassword,
-    onClearPasswords
+    onCalculateNumberSelectedOptions,
+    onClearPasswords,
+    onSetLengthPassword,
+    onSetPasswordForValidate,
+    onSetSelectedOption,
 } = passwordSlice.actions;

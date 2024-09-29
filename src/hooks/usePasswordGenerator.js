@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { onAddPassword, onCalculateNumberSelectedOptions, onClearPasswords, onSetLengthPassword, onSetSelectedOption } from "../store/password/passwordSlice";
+import { onAddPassword, onCalculateNumberSelectedOptions, onClearPasswords, onSetLengthPassword, onSetPasswordForValidate, onSetSelectedOption } from "../store/password/passwordSlice";
 import { setConfigToast } from "../helpers/setConfigToast";
 import { generatePassword } from "../helpers/generatePassword";
 import { validatePasswordStrength } from "../helpers/validatePasswordStrength";
@@ -56,6 +56,11 @@ export const usePasswordGenerator = () => {
         dispatch(onAddPassword(arrayNewPasswords));
     }
 
+    const startClearData = () => {
+        dispatch(onAddPassword([]));
+        dispatch(onSetPasswordForValidate(""));
+    }
+
     return {
         //Properties
         lengthPassword,
@@ -68,5 +73,6 @@ export const usePasswordGenerator = () => {
         startGeneratePasswords,
         setLengthPassword,
         setSelectedOptions,
+        startClearData,
     }
 }

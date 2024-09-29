@@ -1,9 +1,11 @@
-import { Button, Checkbox, FormLabel, Grid, TextField } from '@mui/material';
+import { Button, Checkbox, FormLabel, Grid, Link, TextField } from '@mui/material';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import { PasswordLayout } from './PasswordLayout';
 import { Passwords } from './Passwords';
 import { useUiStore } from '../hooks/useUiStore';
 import { LoadingScreen } from './LoadingScreen';
+import { Link as RouterLink } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const PasswordGeneratorApp = () => {
     const {
@@ -12,7 +14,8 @@ export const PasswordGeneratorApp = () => {
         startGeneratePasswords, 
         setLengthPassword, 
         setSelectedOptions,
-        calculateNumberSelectedOptions
+        calculateNumberSelectedOptions,
+        startClearData
     } = usePasswordGenerator();
 
     const { finishLoadingPasswords, initLoadingPasswords, isLoadingPasswords } = useUiStore();
@@ -33,6 +36,11 @@ export const PasswordGeneratorApp = () => {
         setSelectedOptions({ option: target.name, value: target.checked });
         calculateNumberSelectedOptions();
     }
+
+    useEffect(() => {
+        startClearData();
+    }, []);
+    
 
     return (
         <PasswordLayout title="Generador de contrase&ntilde;as">
@@ -91,8 +99,14 @@ export const PasswordGeneratorApp = () => {
                         <Checkbox onChange={handleChangeOptions} name="symbols" checked={optionsForGenerate.symbols} />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid item xs={12} mb={2} mt={1}>
                         <Button type='submit' variant="contained" fullWidth sx={{ mt: 2 }}>Generar contrase&ntilde;as</Button>
+                    </Grid>
+
+                    <Grid container direction={"row"} justifyContent={"end"}>
+                        <Link component={ RouterLink } color={"inherit"} to="/validate" sx={{ color: "white" }}>
+                            Validar contrase&ntilde;a
+                        </Link>
                     </Grid>
 
                 </Grid>
